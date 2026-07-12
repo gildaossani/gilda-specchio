@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cosa vuoi davvero</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,600&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --ink:#0D0A0D;
+    --cream:#F5F0EC;
+    --fx:#EA1478;
+    --fx-soft:rgba(234,20,120,0.12);
+    --line:rgba(255,255,255,0.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:'DM Sans',sans-serif;
+    min-height:100vh;
+  }
+  .container{max-width:560px;margin:0 auto;padding:0 24px;}
+  .hidden{display:none !important;}
+
+  .btn{
+    padding:17px 34px;
+    background:var(--fx);
+    color:#fff;
+    border:none;
+    border-radius:100px;
+    font-family:'DM Sans',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .btn:active{transform:scale(0.96);}
+  .btn:disabled{opacity:.3;cursor:default;}
+  .btn.secondary{background:transparent;color:var(--cream);border:2px solid rgba(255,255,255,0.3);}
+  .btn.big{padding:20px 44px;font-size:17px;}
+
+  .textarea, .email-input{
+    width:100%;
+    padding:16px 0;
+    border:none;
+    border-bottom:2.5px solid var(--line);
+    background:transparent;
+    font-size:19px;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    color:var(--cream);
+    outline:none;
+    resize:none;
+    line-height:1.6;
+  }
+  .textarea:focus{border-color:var(--fx);}
+  .email-input{font-family:'DM Sans',sans-serif;font-style:normal;font-size:16px;padding:16px 14px;border:2.5px solid var(--line);border-radius:14px;}
+  .email-input:focus{border-color:var(--fx);}
+
+  /* INTRO */
+  #screen-intro{padding-top:70px;padding-bottom:60px;}
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--fx);
+    margin-bottom:28px;
+  }
+  #screen-intro h1{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:clamp(40px,10vw,58px);
+    font-weight:400;
+    line-height:1.05;
+    margin-bottom:22px;
+  }
+  #screen-intro h1 .fx{color:var(--fx);font-weight:600;}
+  .rule{width:60px;height:2px;background:var(--fx);margin-bottom:28px;}
+  #screen-intro .desc{font-size:17px;line-height:1.65;max-width:440px;margin-bottom:16px;color:rgba(245,240,236,0.75);}
+  #screen-intro .desc em{font-style:italic;color:var(--fx);}
+  .meta{font-size:13px;color:rgba(245,240,236,0.4);margin-top:20px;}
+
+  /* PROGRESS */
+  #progress-wrap{position:sticky;top:0;background:var(--ink);z-index:10;padding:18px 24px 14px;border-bottom:1px solid var(--line);}
+  #progress-inner{max-width:560px;margin:0 auto;}
+  .progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .progress-count{font-size:12px;color:rgba(245,240,236,0.4);font-weight:600;letter-spacing:0.05em;}
+  .progress-track{height:3px;background:var(--line);border-radius:6px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--fx);border-radius:6px;transition:width .4s ease;}
+
+  /* DOMANDA */
+  #screen-quiz{padding-bottom:60px;}
+  .q-label{font-size:13px;font-weight:700;color:rgba(245,240,236,0.35);margin-bottom:16px;letter-spacing:0.05em;text-transform:uppercase;}
+  .q-text{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:clamp(22px,5vw,27px);line-height:1.4;margin-bottom:32px;}
+  .opzioni{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .opzione{
+    padding:16px 18px;text-align:left;background:rgba(255,255,255,0.03);
+    border:2px solid var(--line);border-radius:14px;
+    font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;color:var(--cream);
+    cursor:pointer;transition:all .15s;
+  }
+  .opzione.selected{background:var(--fx-soft);border-color:var(--fx);color:#fff;}
+  .q-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:36px;}
+
+  /* EMAIL STEP */
+  #screen-email{padding-top:60px;padding-bottom:60px;text-align:center;}
+  .mirror-icon{width:56px;height:72px;margin:0 auto 22px;border:2.5px solid var(--fx);border-radius:50% 50% 46% 46%;}
+  #screen-email h2{font-family:'Fraunces',serif;font-size:30px;font-weight:400;font-style:italic;margin-bottom:12px;}
+  #screen-email p{font-size:15px;color:rgba(245,240,236,0.55);line-height:1.6;margin-bottom:28px;max-width:400px;margin-left:auto;margin-right:auto;}
+  .privacy-note{font-size:12px;color:rgba(245,240,236,0.3);margin-top:14px;}
+
+  /* LOADING */
+  #screen-loading{padding-top:120px;text-align:center;}
+  .spinner{width:52px;height:52px;border:3px solid var(--line);border-top:3px solid var(--fx);border-radius:50%;margin:0 auto 32px;animation:spin .9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #loading-text{font-family:'Fraunces',serif;font-style:italic;font-size:18px;color:rgba(245,240,236,0.6);}
+
+  /* TEASER / PAYWALL */
+  #screen-teaser{padding-bottom:60px;}
+  .reveal-hero{
+    padding:70px 24px 50px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  .reveal-eyebrow{font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--fx);margin-bottom:20px;}
+  .reveal-title{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(32px,8vw,44px);color:#fff;line-height:1.15;animation:pop .5s cubic-bezier(.2,1.4,.4,1) both;}
+  @keyframes pop{from{opacity:0;transform:scale(.85) translateY(14px);}to{opacity:1;transform:scale(1) translateY(0);}}
+  .reveal-sub{font-family:'Fraunces',serif;font-style:italic;font-size:16px;color:rgba(245,240,236,0.55);margin-top:18px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.6;}
+
+  .teaser-body{max-width:560px;margin:0 auto;padding:0 24px;}
+  .lock-card{padding:36px 4px;}
+  .lock-fade{position:relative;max-height:110px;overflow:hidden;}
+  .lock-fade::after{content:"";position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent, var(--ink));}
+  .lock-preview{font-family:'Fraunces',serif;font-style:italic;font-size:18px;line-height:1.7;color:rgba(245,240,236,0.85);}
+  .risultato-footer{display:flex;gap:12px;flex-wrap:wrap;padding:24px 0 60px;justify-content:center;}
+  .errore{max-width:560px;margin:16px auto 0;padding:12px 24px;background:rgba(234,20,120,0.12);color:var(--fx);font-size:14px;border-radius:12px;}
+
+  /* CONFERMA EMAIL INVIATA */
+  .email-sent-note{
+    max-width:400px;margin:24px auto 0;padding:16px 20px;
+    background:rgba(234,20,120,0.08);border:1px solid rgba(234,20,120,0.25);
+    border-radius:12px;font-size:14px;color:rgba(245,240,236,0.8);line-height:1.5;
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="screen-intro" class="container">
+  <span class="eyebrow">15 domande · 10 minuti</span>
+  <h1>Hai il coraggio<br>di dir<span class="fx">TI</span> la verità?</h1>
+  <div class="rule"></div>
+  <p class="desc">Non è un quiz. <em>È uno specchio.</em> Rispondi di getto, senza filtrare. Alla fine scopri chi sei in questo momento, in cinque aree della tua vita, e le tre cose che vuoi davvero, anche se non le hai mai dette ad alta voce.</p>
+  <button class="btn big" id="btn-start">Comincia →</button>
+  <p class="meta">niente registrazione per iniziare</p>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="hidden">
+  <div id="progress-wrap">
+    <div id="progress-inner">
+      <div class="progress-row">
+        <span class="progress-count" id="progress-area"></span>
+        <span class="progress-count" id="progress-count"></span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div id="quiz-errore" class="errore hidden"></div>
+  <div class="container" id="q-container"></div>
+</div>
+
+<!-- EMAIL -->
+<div id="screen-email" class="hidden container">
+  <div class="mirror-icon"></div>
+  <h2>Lo specchio è pronto a risponderti.</h2>
+  <p>Lasciami la tua email: ti mostro subito l'anteprima qui sotto, e ti mando la lettera completa via email.</p>
+  <input type="email" class="email-input" id="email-input" placeholder="la-tua-email@esempio.it" style="max-width:340px;margin:0 auto 20px;">
+  <br>
+  <button class="btn big" id="btn-genera">Guarda dentro →</button>
+  <p class="privacy-note">La userò solo per la tua lettera e contenuti di Gilda Ossani. Niente spam.</p>
+</div>
+
+<!-- LOADING -->
+<div id="screen-loading" class="hidden container">
+  <div class="spinner"></div>
+  <p id="loading-text">Sto leggendo le tue risposte…</p>
+</div>
+
+<!-- TEASER -->
+<div id="screen-teaser" class="hidden">
+  <div class="reveal-hero">
+    <p class="reveal-eyebrow">Il tuo profilo è</p>
+    <p class="reveal-title" id="teaser-titolo">—</p>
+    <p class="reveal-sub" id="teaser-intro">—</p>
+  </div>
+  <div class="teaser-body">
+    <div class="lock-card">
+      <div class="lock-fade">
+        <p class="lock-preview" id="teaser-preview">—</p>
+      </div>
+    </div>
+    <div class="email-sent-note">
+      La lettera completa, con tutte e cinque le aree e le tue priorità vere, è appena arrivata nella tua casella email.
+    </div>
+    <div class="risultato-footer">
+      <button class="btn secondary" id="btn-reset">Ricomincia</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const AREE = [
+  { id: "vita", label: "Vita & Libertà" },
+  { id: "relazioni", label: "Relazioni" },
+  { id: "lavoro", label: "Lavoro & Creazione" },
+  { id: "corpo", label: "Corpo & Benessere" },
+  { id: "identita", label: "Identità & Crescita" }
+];
+
+const DOMANDE = [
+  { area: "vita", testo: "Se domani mattina ti svegliassi senza obblighi, nessuno che ti aspetta, nessun dovere, qual è la prima cosa che faresti?", tipo: "testo" },
+  { area: "vita", testo: "C'è qualcosa che rimandi da mesi o anni con la scusa che 'non è il momento giusto'? Cosa?", tipo: "testo" },
+  { area: "vita", testo: "Quanto ti senti libera nella tua vita quotidiana?", tipo: "scala", etichette: ["Per niente libera", "Abbastanza libera", "Completamente libera"] },
+  { area: "relazioni", testo: "Pensa alle persone con cui passi più tempo. Ti lasciano energia o te la tolgono?", tipo: "scelta", opzioni: ["Mi danno energia", "Dipende dalla persona", "Spesso mi svuotano", "Un misto difficile da definire"] },
+  { area: "relazioni", testo: "C'è una relazione nella tua vita in cui non sei completamente te stessa? Descrivi brevemente come ti comporti diversamente.", tipo: "testo" },
+  { area: "relazioni", testo: "Cosa desideri di più nelle tue relazioni, che senti mancare?", tipo: "testo" },
+  { area: "lavoro", testo: "Quando hai l'impressione che il tempo voli mentre fai qualcosa, cosa stai facendo?", tipo: "testo" },
+  { area: "lavoro", testo: "Se non avessi bisogno di soldi, dedicheresti comunque del tempo a quello che fai oggi?", tipo: "scelta", opzioni: ["Sì, con ancora più slancio", "In parte sì, in parte no", "Probabilmente no", "Non saprei cosa fare"] },
+  { area: "lavoro", testo: "Qual è la cosa che hai creato o costruito, anche piccola, di cui sei più orgogliosa?", tipo: "testo" },
+  { area: "corpo", testo: "Come descriveresti il tuo rapporto con il tuo corpo in questo momento?", tipo: "scelta", opzioni: ["In pace, lo ascolto", "Altalenante, dipende dal periodo", "Conflittuale, ci lavoro", "Lo ignoro quasi sempre"] },
+  { area: "corpo", testo: "C'è un'abitudine fisica che sai che ti farebbe stare meglio ma non riesci a stabilizzare? Quale?", tipo: "testo" },
+  { area: "corpo", testo: "Quando ti senti più viva fisicamente? In quale momento della giornata, della settimana, dell'anno?", tipo: "testo" },
+  { area: "identita", testo: "C'è una versione di te, più coraggiosa, più libera, più autentica, che senti esistere dentro ma fatica a emergere fuori? Descrivila.", tipo: "testo" },
+  { area: "identita", testo: "Qual è la cosa che ti spaventa di più del diventare davvero chi vuoi essere?", tipo: "testo" },
+  { area: "identita", testo: "Tra cinque anni, cosa vorresti poterti dire di aver fatto, o di essere diventata?", tipo: "testo" }
+];
+const TOTAL = DOMANDE.length;
+
+let index = 0;
+let risposte = {};
+let email = "";
+let letteraTesto = "";
+
+const screens = {
+  intro: document.getElementById("screen-intro"),
+  quiz: document.getElementById("screen-quiz"),
+  email: document.getElementById("screen-email"),
+  loading: document.getElementById("screen-loading"),
+  teaser: document.getElementById("screen-teaser")
+};
+function showScreen(name){
+  Object.values(screens).forEach(s => s.classList.add("hidden"));
+  screens[name].classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+
+document.getElementById("btn-start").addEventListener("click", () => {
+  showScreen("quiz");
+  renderDomanda();
+});
+
+function renderProgress(){
+  const areaIndex = Math.floor(index / 3);
+  const area = AREE[Math.min(areaIndex, AREE.length - 1)];
+  document.getElementById("progress-area").textContent = area.label;
+  document.getElementById("progress-count").textContent = `${index}/${TOTAL}`;
+  document.getElementById("progress-fill").style.width = `${Math.round((index/TOTAL)*100)}%`;
+}
+
+function renderDomanda(){
+  renderProgress();
+  const d = DOMANDE[index];
+  const container = document.getElementById("q-container");
+  const valorePrecedente = risposte[index];
+
+  let inputHtml = "";
+  if (d.tipo === "testo") {
+    inputHtml = `<textarea class="textarea" id="risposta-input" rows="3" placeholder="Scrivi qui, senza filtrare…">${valorePrecedente || ""}</textarea>`;
+  } else if (d.tipo === "scelta") {
+    inputHtml = `<div class="opzioni">` + d.opzioni.map(op =>
+      `<button type="button" class="opzione ${valorePrecedente === op ? 'selected' : ''}" data-val="${op}">${op}</button>`
+    ).join("") + `</div>`;
+  } else if (d.tipo === "scala") {
+    const val = valorePrecedente || 5;
+    inputHtml = `
+      <input type="range" min="1" max="10" value="${val}" id="scala-input" style="width:100%;accent-color:var(--fx);">
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:rgba(245,240,236,0.4);">
+        <span>${d.etichette[0]}</span><span>${d.etichette[1]}</span><span>${d.etichette[2]}</span>
+      </div>
+      <div style="text-align:center;font-size:34px;font-weight:700;color:var(--fx);margin:14px 0;font-family:'Fraunces',serif;" id="scala-val">${val}</div>`;
+  }
+
+  container.innerHTML = `
+    <p class="q-label">Domanda ${index + 1}</p>
+    <h2 class="q-text">${d.testo}</h2>
+    ${inputHtml}
+    <div class="q-footer">
+      <button class="btn" id="btn-avanti">${index === TOTAL - 1 ? "Continua →" : "Avanti →"}</button>
+    </div>
+  `;
+
+  if (d.tipo === "scelta") {
+    container.querySelectorAll(".opzione").forEach(btn => {
+      btn.addEventListener("click", () => {
+        container.querySelectorAll(".opzione").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        btn.dataset.selected = "true";
+      });
+    });
+  }
+  if (d.tipo === "scala") {
+    document.getElementById("scala-input").addEventListener("input", (e) => {
+      document.getElementById("scala-val").textContent = e.target.value;
+    });
+  }
+
+  document.getElementById("btn-avanti").addEventListener("click", () => {
+    let valore;
+    if (d.tipo === "testo") {
+      valore = document.getElementById("risposta-input").value.trim();
+      if (!valore) return;
+    } else if (d.tipo === "scelta") {
+      const sel = container.querySelector(".opzione.selected");
+      if (!sel) return;
+      valore = sel.dataset.val;
+    } else {
+      valore = document.getElementById("scala-input").value;
+    }
+    risposte[index] = valore;
+    if (index < TOTAL - 1) {
+      index++;
+      renderDomanda();
+    } else {
+      showScreen("email");
+    }
+  });
+}
+
+document.getElementById("btn-genera").addEventListener("click", async () => {
+  const val = document.getElementById("email-input").value.trim();
+  if (!val || !val.includes("@")) {
+    document.getElementById("email-input").style.borderColor = "#EA1478";
+    return;
+  }
+  email = val;
+  await generaLettera();
+});
+
+async function generaLettera(){
+  showScreen("loading");
+  const phases = [
+    "Sto leggendo le tue risposte…",
+    "Sto cercando i fili che si ripetono…",
+    "Sto costruendo il tuo profilo…",
+    "Sto scrivendo la tua lettera…"
+  ];
+  let p = 0;
+  const loadingEl = document.getElementById("loading-text");
+  const interval = setInterval(() => {
+    p = (p + 1) % phases.length;
+    loadingEl.textContent = phases[p];
+  }, 1900);
+
+  // Prepara le risposte nel formato atteso dalla Edge Function: {area, domanda, risposta}
+  const risposteFormattate = DOMANDE.map((d, i) => ({
+    area: d.area,
+    domanda: d.testo,
+    risposta: risposte[i] ?? ""
+  }));
+
+  try {
+    const res = await fetch("https://qnhnsjqzheyiacfmmmbe.supabase.co/functions/v1/quiz-gilda-lettera", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, risposte: risposteFormattate })
+    });
+
+    const data = await res.json();
+    clearInterval(interval);
+
+    if (!res.ok || !data.ok) {
+      throw new Error(data.error || "Errore nella generazione della lettera");
+    }
+
+    letteraTesto = data.lettera;
+    const { titolo, intro, corpo } = estraiAnteprimaLettera(letteraTesto);
+
+    document.getElementById("teaser-titolo").textContent = titolo;
+    document.getElementById("teaser-intro").textContent = intro;
+    document.getElementById("teaser-preview").textContent = corpo;
+
+    showScreen("teaser");
+  } catch (err) {
+    clearInterval(interval);
+    document.getElementById("quiz-errore").textContent = "Qualcosa non ha funzionato. Riprova tra un momento.";
+    document.getElementById("quiz-errore").classList.remove("hidden");
+    showScreen("quiz");
+    console.error(err);
+  }
+}
+
+// Estrae titolo e prime righe dalla lettera in markdown per l'anteprima a schermo
+// (l'email completa arriva via Brevo, qui mostriamo solo un assaggio)
+function estraiAnteprimaLettera(markdown){
+  const righe = markdown.split("\n").filter(r => r.trim().length > 0);
+  let titolo = "Il tuo profilo";
+  let corpoRighe = [];
+  for (const riga of righe) {
+    if (riga.startsWith("# ")) {
+      titolo = riga.replace("# ", "").trim();
+    } else if (!riga.startsWith("#")) {
+      corpoRighe.push(riga);
+    }
+    if (corpoRighe.length >= 2) break;
+  }
+  return {
+    titolo,
+    intro: "Quello che hai scritto rivela molto di più di quello che pensavi di rivelare.",
+    corpo: corpoRighe.join(" ").slice(0, 320) + "…"
+  };
+}
+
+document.getElementById("btn-reset").addEventListener("click", () => {
+  index = 0;
+  risposte = {};
+  email = "";
+  letteraTesto = "";
+  document.getElementById("quiz-errore").classList.add("hidden");
+  showScreen("intro");
+});
+</script>
+</body>
+</html>
