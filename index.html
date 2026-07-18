@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cosa vuoi davvero</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,600&family=DM+Sans:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,600&family=Dancing+Script:wght@500;700&family=DM+Sans:wght@400;500;600;700&display=swap');
 
   :root{
     --ink:#0D0A0D;
@@ -68,8 +68,8 @@
     margin-bottom:28px;
   }
   #screen-intro h1{
-    font-family:'Fraunces',serif;
-    font-style:italic;
+    font-family:'Dancing Script',cursive;
+    font-style:normal;
     font-size:clamp(40px,10vw,58px);
     font-weight:400;
     line-height:1.05;
@@ -80,6 +80,22 @@
   #screen-intro .desc{font-size:17px;line-height:1.65;max-width:440px;margin-bottom:16px;color:rgba(245,240,236,0.75);}
   #screen-intro .desc em{font-style:italic;color:var(--fx);}
   .meta{font-size:13px;color:rgba(245,240,236,0.4);margin-top:20px;}
+
+
+  /* BLOCCO ONESTA */
+  .honest-box{
+    border:1.5px solid rgba(234,20,120,0.35);
+    border-radius:16px;
+    padding:24px 24px 18px;
+    margin:6px 0 30px;
+    max-width:480px;
+    background:rgba(234,20,120,0.05);
+  }
+  .honest-box .hb-title{font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:var(--fx);margin-bottom:12px;}
+  .honest-box p{font-size:15px;line-height:1.65;color:rgba(245,240,236,0.82);margin-bottom:12px;}
+  .honest-box p:last-child{margin-bottom:6px;}
+  .honest-box em{font-family:'Fraunces',serif;font-style:italic;color:var(--cream);}
+  .honest-box .hb-strong{color:var(--cream);font-weight:600;}
 
   /* PROGRESS */
   #progress-wrap{position:sticky;top:0;background:var(--ink);z-index:10;padding:18px 24px 14px;border-bottom:1px solid var(--line);}
@@ -152,6 +168,15 @@
   <h1>Hai il coraggio<br>di dir<span class="fx">TI</span> la verità?</h1>
   <div class="rule"></div>
   <p class="desc">Non è un quiz. <em>È uno specchio.</em> Rispondi di getto, senza filtrare. Alla fine scopri chi sei in questo momento, in cinque aree della tua vita, e le tre cose che vuoi davvero, anche se non le hai mai dette ad alta voce.</p>
+  <div class="honest-box">
+    <p class="hb-title">Prima di iniziare, una cosa che conta.</p>
+    <p>Questo specchio riflette quello che gli mostri. Una risposta di una parola produce una lettera vuota. Non per cattiveria: non c’è materia su cui lavorare.</p>
+    <p>Due esempi.</p>
+    <p>Alla domanda “cosa manca nelle tue relazioni?” puoi rispondere <em>“niente di particolare”</em>. Oppure: <em>“ho tante conoscenze e nessuna amica a cui direi come sto davvero. Alle cene rido, poi torno a casa e mi sento sola”</em>.</p>
+    <p>Alla domanda “che rapporto hai con il tuo corpo?” puoi scrivere <em>“normale”</em>. Oppure: <em>“lo tratto come un mezzo di trasporto. Mi accorgo che esiste solo quando fa male, e non ricordo l’ultima volta che mi sono sentita bella”</em>.</p>
+    <p>Le prime risposte non dicono niente di te. Le seconde dicono tutto.</p>
+    <p><span class="hb-strong">Qui non devi fare bella figura con nessuno.</span> Scrivi come parleresti a te stessa, con calma e senza filtri. Più metti, più ricevi.</p>
+  </div>
   <button class="btn big" id="btn-start">Comincia →</button>
   <p class="meta">niente registrazione per iniziare</p>
 </div>
