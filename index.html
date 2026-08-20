@@ -253,6 +253,12 @@ La lettera completa, con tutte e cinque le aree e le tue priorità vere, è appe
 </div>
 
 <script>
+// Cattura gli UTM dall'URL una sola volta al caricamento della pagina, restano validi per tutta la sessione del quiz.
+const _urlParams = new URLSearchParams(window.location.search);
+const UTM_SOURCE = _urlParams.get("utm_source") || "";
+const UTM_MEDIUM = _urlParams.get("utm_medium") || "";
+const UTM_CONTENT = _urlParams.get("utm_content") || "";
+
 const AREE = [
 { id: "vita", label: "Vita & Libertà" },
 { id: "relazioni", label: "Relazioni" },
@@ -418,7 +424,14 @@ try {
 const res = await fetch("https://qnhnsjqzheyiacfmmmbe.supabase.co/functions/v1/quiz-gilda-lettera", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ email, risposte: risposteFormattate, newsletter_optin: newsletterOptin })
+body: JSON.stringify({
+email,
+risposte: risposteFormattate,
+newsletter_optin: newsletterOptin,
+utm_source: UTM_SOURCE,
+utm_medium: UTM_MEDIUM,
+utm_content: UTM_CONTENT
+})
 });
 
 const data = await res.json();
